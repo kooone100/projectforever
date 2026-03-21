@@ -18,8 +18,8 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 100
 
 class CategoryView(APIView):
-    #permission_classes = [IsAuthenticated]
-    #authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         try:
