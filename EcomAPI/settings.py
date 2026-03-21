@@ -65,9 +65,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-
-    True
-
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
+    "http://192.168.100.6:8081",
+    "https://waamanforever.onrender.com"
 ]
 
 ROOT_URLCONF = 'EcomAPI.urls'
