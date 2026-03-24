@@ -21,10 +21,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('Eshop.urls')),
-    path('api/token/', obtain_auth_token, name='api_token_auth'),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # Correct: no leading slash
+    path("admin/", admin.site.urls),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # API routes from your Eshop app
+    path("api/", include("Eshop.urls")),
+
+    # Token authentication endpoint
+    path("api/token/", obtain_auth_token, name="api_token_auth"),
+
+    # Browsable API login/logout
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+]
+
+# Only serve media files locally when DEBUG=True
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
