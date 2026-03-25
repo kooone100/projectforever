@@ -183,3 +183,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if DEBUG:
     print("DEBUG MODE: ALLOWED_HOSTS =", ALLOWED_HOSTS)
     print("DEBUG MODE: RENDER_EXTERNAL_HOSTNAME =", render_external_host)
+
+print("DATABASE_URL in use:", os.environ.get("DATABASE_URL"))
