@@ -31,10 +31,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")  # better to load from .env
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['waamanforever.onrender.com']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
+# Add Render domain automatically if available
+render_external_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_external_host:
+    ALLOWED_HOSTS.append(render_external_host)
 
 # Application definition
 
@@ -110,7 +114,9 @@ DATABASES = {
 # Render PostgreSQL Database Credentials
 
 DATABASES = {
-    'default': dj_database_url.parse(env('DATABASE_URL'))
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 
@@ -172,3 +178,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Debug logging (only when DEBUG=True)
+if DEBUG:
+    print("DEBUG MODE: ALLOWED_HOSTS =", ALLOWED_HOSTS)
+    print("DEBUG MODE: RENDER_EXTERNAL_HOSTNAME =", render_external_host)
