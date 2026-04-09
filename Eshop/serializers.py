@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductImageSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(read_only=True)
-    image = serializers.SerializerMethodField()  # ✅ override image field
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductImage
@@ -17,15 +17,19 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if request:
-            return request.build_absolute_uri(obj.image.url)
-        return obj.image.url
+        if obj.image_file:
+            url = obj.image_file.url
+        elif obj.image_url:
+            url = obj.image_url
+        else:
+            return None
+        return request.build_absolute_uri(url) if request else url
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     images = ProductImageSerializer(many=True, read_only=True)
     image = serializers.SerializerMethodField()
-    primary_image = serializers.SerializerMethodField()  # ✅ new field
+    primary_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -38,25 +42,38 @@ class ProductSerializer(serializers.ModelSerializer):
             "image",
             "new_arrival",
             "images",
-            "primary_image",  # ✅ include in response
+            "primary_image",
         ]
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if request and obj.image:
-            return request.build_absolute_uri(obj.image.url)
-        return obj.image.url if obj.image else None
+        if obj.image_file:
+            url = obj.image_file.url
+        elif obj.image_url:
+            url = obj.image_url
+        else:
+            return None
+
+        return request.build_absolute_uri(url) if request else url
 
     def get_primary_image(self, obj):
         request = self.context.get("request")
-        primary = obj.images.filter(primary=True).first()  # ✅ use related_name="images"
-        if primary and request:
-            return request.build_absolute_uri(primary.image.url)
-        return primary.image.url if primary else None
+        primary = obj.images.filter(primary=True).first()
+        if not primary:
+            return None
+
+        if primary.image_file:
+            url = primary.image_file.url
+        elif primary.image_url:
+            url = primary.image_url
+        else:
+            return None
+
+        return request.build_absolute_uri(url) if request else url
 
 class NewArrivalSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()          # ✅ override image field
-    primary_image = serializers.SerializerMethodField()  # ✅ new field
+    image = serializers.SerializerMethodField()
+    primary_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -64,13 +81,26 @@ class NewArrivalSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if request and obj.image:
-            return request.build_absolute_uri(obj.image.url)
-        return obj.image.url if obj.image else None
+        if obj.image_file:
+            url = obj.image_file.url
+        elif obj.image_url:
+            url = obj.image_url
+        else:
+            return None
+
+        return request.build_absolute_uri(url) if request else url
 
     def get_primary_image(self, obj):
         request = self.context.get("request")
-        primary = obj.images.filter(primary=True).first()  # ✅ uses related_name="images"
-        if primary and request:
-            return request.build_absolute_uri(primary.image.url)
-        return primary.image.url if primary else None
+        primary = obj.images.filter(primary=True).first()
+        if not primary:
+            return None
+
+        if primary.image_file:
+            url = primary.image_file.url
+        elif primary.image_url:
+            url = primary.image_url
+        else:
+            return None
+
+        return request.build_absolute_uri(url) if request else url
