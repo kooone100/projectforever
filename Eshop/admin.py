@@ -73,14 +73,6 @@ class ProductAdmin(admin.ModelAdmin):
         return "No primary image"
     primary_image_badge.short_description = "Primary Image"
 
-    # ✅ Validation: enforce at least one primary image
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        if not obj.images.filter(primary=True).exists():
-            raise ValidationError(
-                f"Product '{obj.name}' must have at least one primary image."
-            )
-
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
