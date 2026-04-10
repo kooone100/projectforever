@@ -53,7 +53,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "category", "price", "new_arrival", "primary_image_badge")
     list_filter = ("category", "new_arrival", HasPrimaryImageFilter)
     search_fields = ("name", "description")
-    autocomplete_fields = ("category",)
+    # autocomplete_fields = ("category",)
     inlines = [ProductImageInline]
 
     def primary_image_badge(self, obj):
