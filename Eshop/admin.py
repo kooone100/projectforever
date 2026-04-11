@@ -54,6 +54,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ("category", "new_arrival", HasPrimaryImageFilter)
     search_fields = ("name", "description")
     inlines = [ProductImageInline]
+    readonly_fields = ("primary_image_badge",)
 
     def primary_image_badge(self, obj):
         primary = obj.images.filter(primary=True).first()
