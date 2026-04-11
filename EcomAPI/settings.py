@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
+GRAPPELLI_ADMIN_TITLE = "Waaman E‑Commerce Admin"
+GRAPPELLI_ADMIN_HEADLINE = "Waaman Control Panel"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
