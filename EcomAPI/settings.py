@@ -57,9 +57,6 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
-GRAPPELLI_ADMIN_TITLE = "Waaman E‑Commerce Admin"
-GRAPPELLI_ADMIN_HEADLINE = "Waaman Control Panel"
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -81,6 +78,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.100.6:8081",
     "https://waamanforever.onrender.com"
 ]
+
+GRAPPELLI_ADMIN_TITLE = "Waaman E‑Commerce Admin"
+GRAPPELLI_ADMIN_HEADLINE = "Waaman Control Panel"
 
 ROOT_URLCONF = 'EcomAPI.urls'
 
