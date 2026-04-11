@@ -43,7 +43,7 @@ if render_external_host:
 # Application definition
 
 INSTALLED_APPS = [
-    'jet'
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

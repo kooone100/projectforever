@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path("grappelli/", include("grappelli.urls")),
     # Correct: no leading slash
     path("admin/", admin.site.urls),
 
