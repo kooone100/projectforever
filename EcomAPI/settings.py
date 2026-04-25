@@ -13,21 +13,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 import dj_database_url
 
 import environ
 env = environ.Env()
 environ.Env.read_env()
-
-cloudinary.config(
-    cloud_name = env("CLOUDINARY_URL").split('@')[-1],
-    api_key = "197824151783737",
-    api_secret = "0X5G2aKm5DNgAX3K9UMXGyfcgwc"
-)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,8 +54,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'django_filters',
-    'cloudinary',
     'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -188,6 +178,14 @@ USE_TZ = True
 # Media storage with Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dyhwgtkuk",
+    api_key="197824151783737",
+    api_secret="0X5G2aKm5DNgAX3K9UMXGyfcgwc"
+)
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -208,3 +206,11 @@ if DEBUG:
 
 print("DATABASE_URL in use:", os.environ.get("DATABASE_URL"))
 '''
+
+# Debug Cloudinary environment variable
+if DEBUG:
+    cloudinary_url = os.environ.get("CLOUDINARY_URL")
+    print("DEBUG MODE: CLOUDINARY_URL =", cloudinary_url)
+
+    from django.core.files.storage import default_storage
+    print("DEBUG MODE: Default storage backend =", default_storage.__class__)
