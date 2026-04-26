@@ -214,3 +214,9 @@ if DEBUG:
 
     from django.core.files.storage import default_storage
     print("DEBUG MODE: Default storage backend =", default_storage.__class__)
+
+from django.core.files.storage import default_storage
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+# Force default_storage to use Cloudinary
+default_storage._wrapped = MediaCloudinaryStorage()
