@@ -105,20 +105,6 @@ WSGI_APPLICATION = 'EcomAPI.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_wforgh',
-        'USER': 'postgres',
-        'PASSWORD': 'Zizzy-2508',
-        'PORT': '5432',
-        'HOST': '127.0.0.1'
-    }
-}
-'''
-
 # Render PostgreSQL Database Credentials
 
 DATABASES = {
@@ -178,21 +164,11 @@ USE_TZ = True
 # Media storage with Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-import cloudinary
-
-cloudinary.config(
-    cloud_name="dyhwgtkuk",
-    api_key="197824151783737",
-    api_secret="0X5G2aKm5DNgAX3K9UMXGyfcgwc"
-)
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"  # important for Render deployment
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -205,7 +181,7 @@ if DEBUG:
     print("DEBUG MODE: RENDER_EXTERNAL_HOSTNAME =", render_external_host)
 
 print("DATABASE_URL in use:", os.environ.get("DATABASE_URL"))
-'''
+
 
 # Debug Cloudinary environment variable
 if DEBUG:
@@ -220,3 +196,5 @@ from cloudinary_storage.storage import MediaCloudinaryStorage
 
 # Force default_storage to use Cloudinary
 default_storage._wrapped = MediaCloudinaryStorage()
+
+'''
