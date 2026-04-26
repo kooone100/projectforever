@@ -174,27 +174,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"  # important for Render deployment
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-'''
-# Debug logging (only when DEBUG=True)
-if DEBUG:
-    print("DEBUG MODE: ALLOWED_HOSTS =", ALLOWED_HOSTS)
-    print("DEBUG MODE: RENDER_EXTERNAL_HOSTNAME =", render_external_host)
 
-print("DATABASE_URL in use:", os.environ.get("DATABASE_URL"))
-
-
-# Debug Cloudinary environment variable
-if DEBUG:
-    cloudinary_url = os.environ.get("CLOUDINARY_URL")
-    print("DEBUG MODE: CLOUDINARY_URL =", cloudinary_url)
-
-    from django.core.files.storage import default_storage
-    print("DEBUG MODE: Default storage backend =", default_storage.__class__)
-
+# Force default_storage to use Cloudinary (needed in this environment)
 from django.core.files.storage import default_storage
 from cloudinary_storage.storage import MediaCloudinaryStorage
-
-# Force default_storage to use Cloudinary
 default_storage._wrapped = MediaCloudinaryStorage()
-
-'''
