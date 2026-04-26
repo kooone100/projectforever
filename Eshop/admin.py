@@ -14,13 +14,11 @@ class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1
     readonly_fields = ("image_preview",)
-    fields = ("image_preview", "image_file", "image_url", "primary")
+    fields = ("image_preview", "image", "primary")
 
     def image_preview(self, obj):
-        if obj.image_file:
-            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image_file.url)
-        elif obj.image_url:
-            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image_url)
+        if obj.image:
+            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image.url)
         return "No image"
     image_preview.short_description = "Preview"
 
@@ -50,27 +48,26 @@ class HasPrimaryImageFilter(admin.SimpleListFilter):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "category", "price", "new_arrival", "primary_image_badge")
+    list_display = ("id", "name", "category", "price", "new_arrival", "thumbnail", "primary_image_badge")
     list_filter = ("category", "new_arrival", HasPrimaryImageFilter)
     search_fields = ("name", "description")
     inlines = [ProductImageInline]
-    readonly_fields = ("primary_image_badge",)
+    readonly_fields = ("primary_image_badge", "thumbnail")
+
+    def thumbnail(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height:60px;width:auto;" />', obj.image.url)
+        return "No image"
+    thumbnail.short_description = "Thumbnail"
 
     def primary_image_badge(self, obj):
         primary = obj.images.filter(primary=True).first()
-        if primary:
-            if primary.image_file:
-                return format_html(
-                    '<span style="color:green;font-weight:bold;">★</span> '
-                    '<img src="{}" style="max-height:80px;width:auto;" />',
-                    primary.image_file.url
-                )
-            elif primary.image_url:
-                return format_html(
-                    '<span style="color:green;font-weight:bold;">★</span> '
-                    '<img src="{}" style="max-height:80px;width:auto;" />',
-                    primary.image_url
-                )
+        if primary and primary.image:
+            return format_html(
+                '<span style="color:green;font-weight:bold;">★</span> '
+                '<img src="{}" style="max-height:80px;width:auto;" />',
+                primary.image.url
+            )
         return "No primary image"
     primary_image_badge.short_description = "Primary Image"
 
@@ -82,9 +79,7 @@ class ProductImageAdmin(admin.ModelAdmin):
     readonly_fields = ("image_preview",)
 
     def image_preview(self, obj):
-        if obj.image_file:
-            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image_file.url)
-        elif obj.image_url:
-            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image_url)
+        if obj.image:
+            return format_html('<img src="{}" style="max-height:100px;width:auto;" />', obj.image.url)
         return "No image"
     image_preview.short_description = "Image"
