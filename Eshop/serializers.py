@@ -5,25 +5,22 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["id", "name", "description"]
-        depth = 1
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(read_only=True)
     image = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductImage
-        fields = ["id", "product", "image", "primary"]
+        fields = ["id", "image", "primary"]
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if obj.image_file:
-            url = obj.image_file.url
-        elif obj.image_url:
-            url = obj.image_url
-        else:
-            return None
-        return request.build_absolute_uri(url) if request else url
+        if obj.image:
+            url = obj.image.url
+            return request.build_absolute_uri(url) if request else url
+        return None
+
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
@@ -39,37 +36,27 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "price",
-            "image",
+            "image",          # main product image
             "new_arrival",
-            "images",
-            "primary_image",
+            "images",         # gallery images
+            "primary_image",  # computed primary gallery image
         ]
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if obj.image_file:
-            url = obj.image_file.url
-        elif obj.image_url:
-            url = obj.image_url
-        else:
-            return None
-
-        return request.build_absolute_uri(url) if request else url
+        if obj.image:
+            url = obj.image.url
+            return request.build_absolute_uri(url) if request else url
+        return None
 
     def get_primary_image(self, obj):
         request = self.context.get("request")
         primary = obj.images.filter(primary=True).first()
-        if not primary:
-            return None
+        if primary and primary.image:
+            url = primary.image.url
+            return request.build_absolute_uri(url) if request else url
+        return None
 
-        if primary.image_file:
-            url = primary.image_file.url
-        elif primary.image_url:
-            url = primary.image_url
-        else:
-            return None
-
-        return request.build_absolute_uri(url) if request else url
 
 class NewArrivalSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
@@ -81,26 +68,15 @@ class NewArrivalSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get("request")
-        if obj.image_file:
-            url = obj.image_file.url
-        elif obj.image_url:
-            url = obj.image_url
-        else:
-            return None
-
-        return request.build_absolute_uri(url) if request else url
+        if obj.image:
+            url = obj.image.url
+            return request.build_absolute_uri(url) if request else url
+        return None
 
     def get_primary_image(self, obj):
         request = self.context.get("request")
         primary = obj.images.filter(primary=True).first()
-        if not primary:
-            return None
-
-        if primary.image_file:
-            url = primary.image_file.url
-        elif primary.image_url:
-            url = primary.image_url
-        else:
-            return None
-
-        return request.build_absolute_uri(url) if request else url
+        if primary and primary.image:
+            url = primary.image.url
+            return request.build_absolute_uri(url) if request else url
+        return None
