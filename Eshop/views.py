@@ -101,13 +101,12 @@ class NewArrivalView(APIView):
 
 class FaucetView(APIView):
     def get(self, request):
-        faucets = Product.objects.filter(category__name="Faucets")
-        serializer = ProductSerializer(faucets, many=True, context={"request": request})  # ✅ added context
+        faucets = Product.objects.filter(category__name__iexact="faucets")
+        serializer = ProductSerializer(faucets, many=True, context={"request": request})
         return Response(serializer.data)
-
 
 class SanwareView(APIView):
     def get(self, request):
-        sanware = Product.objects.filter(category__name="Sanitary Ware")
-        serializer = ProductSerializer(sanware, many=True, context={"request": request})  # ✅ added context
+        sanware = Product.objects.filter(category__name__iexact="sanitary ware")
+        serializer = ProductSerializer(sanware, many=True, context={"request": request})
         return Response(serializer.data)
